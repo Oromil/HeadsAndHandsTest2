@@ -10,6 +10,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val mDataManager: DataManager)
     : ViewModel() {
 
+    val logout = MutableLiveData<Boolean>()
+
     var update: MutableLiveData<Boolean> = MutableLiveData()
 
     var result: LiveData<List<StoryEntity>> = Transformations
@@ -23,5 +25,10 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager)
 
     fun update() {
         update.value = true
+    }
+
+    fun logoutUser(){
+        mDataManager.logoutUser()
+        logout.value = true
     }
 }

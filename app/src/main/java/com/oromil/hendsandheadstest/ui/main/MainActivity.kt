@@ -6,9 +6,12 @@ import android.content.Intent
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
+import com.oromil.hendsandheadstest.ui.auth.SignInActivity
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,6 +21,18 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
 
     override fun getLayoutId(): Int = R.layout.activity_main
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout -> mViewModel.logoutUser()
+        }
+        return true
+    }
 
     override fun initViews() {
         swipeRefreshLayout = refreshLayout
@@ -43,6 +58,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
         mViewModel.result.observe(this, Observer { data ->
             (newsRecyclerView.adapter as NewsAdapter).updateData(data as List<StoryEntity>)
             swipeRefreshLayout.isRefreshing = false
+        })
+        mViewModel.logout.observe(this, Observer {
+            SignInActivity.start(this)
+            finish()
         })
     }
 

@@ -1,12 +1,15 @@
 package com.oromil.hendsandheadstest.ui.auth
 
 import android.arch.lifecycle.Observer
+import android.content.Context
+import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import com.oromil.hendsandheadstest.ui.main.MainActivity
 import com.oromil.hendsandheadstest.ui.registration.RegistrationActivity
+import kotlinx.android.synthetic.main.activity_signin.*
 import kotlinx.android.synthetic.main.app_bar.*
 
 class SignInActivity : BaseActivity<SignInViewModel>() {
@@ -30,11 +33,18 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
 
     override fun initViews() {
         setupActionBar()
+        btnApply.setOnClickListener {
+            emailInputLayout.error = ""
+            mViewModel.signIn(etEmail.text.toString(), etPassword.text.toString())
+        }
     }
 
     override fun subscribeOnViewModelLiveData() {
-        mViewModel.authorizationSuccess.observe(this, Observer {
-            MainActivity.start(this)
+        mViewModel.authorizationSuccess.observe(this, Observer { success ->
+            success ?: return@Observer
+            if (success)
+                MainActivity.start(this)
+            else emailInputLayout.error = getString(R.string.unsuccess_login)
         })
     }
 
@@ -45,5 +55,9 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+    }
+
+    companion object {
+        fun start(context: Context) = context.startActivity(Intent(context, SignInActivity::class.java))
     }
 }

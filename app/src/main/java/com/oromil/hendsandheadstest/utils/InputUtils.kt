@@ -20,4 +20,4 @@ fun isPasswordValid(password: String): Boolean {
     return isDataValid(password, PASSWORD_PATTERN)
 }
 
-fun isDataEqual(data1: String, data2: String) = data1 == data2
+fun isDataEqual(data1: String?, data2: String?) = data1 == data2

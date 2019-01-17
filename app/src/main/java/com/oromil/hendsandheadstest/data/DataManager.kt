@@ -38,6 +38,11 @@ class DataManager @Inject constructor(private val api: Api, private val dataBase
         sharedPreferences.saveUserName(userAccount.name)
     }
 
+    fun logoutUser(){
+        sharedPreferences.saveUserName("")
+        sharedPreferences.saveUserEmail("")
+    }
+
     @WorkerThread
     fun getUserAccount(email:String) = dataBaseDao.getUserWithEmail(email)
 }
