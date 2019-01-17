@@ -41,7 +41,7 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
         if (!isDataValid)
             return
 
-        val userAccount = UserAccount(email, name, pass)
+        val userAccount = encryptUserAccount(UserAccount(email, name, pass))
 
         ioThenMain({ dataManager.saveUser(userAccount) }) { id ->
             when (id) {
