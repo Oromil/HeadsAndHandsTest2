@@ -1,26 +1,19 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-    <!--<style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
-    <!--</style>-->
 
     <style name="CustomActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:actionMenuTextColor">@color/colorAccent</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
     </style>
 
-    <style name="CustomActionButton" parent="Base.TextAppearance.AppCompat.Widget.Button">
-        <item name="android:background">@drawable/selector_button_signin</item>
+    <style name="SignInButton" parent="Base.Widget.AppCompat.Button">
         <item name="android:textColor">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/orange</item>
+        <item name="colorControlHighlight">#ef6c00</item>
     </style>
 </resources>
