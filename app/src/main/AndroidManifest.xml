@@ -15,7 +15,6 @@
 
         <activity
             android:name=".ui.auth.SignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -26,10 +25,7 @@
         </activity>
         <activity
             android:name=".ui.registration.RegistrationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:screenOrientation="portrait"/>
         <activity android:name="com.oromil.hendsandheadstest.ui.main.MainActivity"></activity>
     </application>
 
