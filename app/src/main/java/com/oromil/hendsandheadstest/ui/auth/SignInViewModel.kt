@@ -32,4 +32,9 @@ class SignInViewModel @Inject constructor(private val dataManager: DataManager) 
             }
         }
     }
+
+    fun login(userAccount: UserAccount){
+        dataManager.loginUserAccount(userAccount)
+        authorizationSuccess.value = true
+    }
 }

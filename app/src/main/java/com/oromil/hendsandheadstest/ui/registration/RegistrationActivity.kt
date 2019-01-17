@@ -1,15 +1,20 @@
 package com.oromil.hendsandheadstest.ui.registration
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.TextInputLayout
+import android.view.View
 import com.oromil.hendsandheadstest.R
+import com.oromil.hendsandheadstest.data.entities.UserAccount
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import com.oromil.hendsandheadstest.ui.main.MainActivity
 import com.oromil.hendsandheadstest.ui.registration.RegistrationViewModel.InputError.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.android.synthetic.main.app_bar.*
+
+const val RESULT_INTENT_KEY = "user_account"
 
 class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
 
@@ -23,6 +28,7 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
         setupActionBar()
         inputLayouts = arrayListOf(emailInputLayout, nameTextInputLayout, passwordInputLayout, repeatInputLayout)
         btnApply.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
             updateInputMessages()
             //todo
             mViewModel.saveUser(etEmail.text.toString(),
@@ -32,6 +38,7 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
 
     override fun subscribeOnViewModelLiveData() {
         mViewModel.incorrectInput.observe(this, Observer { error ->
+            progressBar.visibility = View.GONE
             error ?: return@Observer
             when (error) {
                 INCORRECT_EMAIL -> emailInputLayout.error = getString(R.string.email_error)
@@ -42,9 +49,9 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
             }
         })
         mViewModel.accountCreated.observe(this, Observer { account ->
+            progressBar.visibility = View.GONE
             account ?: return@Observer
-            mViewModel.loginUser(account)
-            MainActivity.start(this)
+            finishWithResult(account)
         })
     }
 
@@ -63,12 +70,14 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
     }
 
     private fun updateInputMessages() {
-        for (inputLayout in inputLayouts) {
+        for (inputLayout in inputLayouts)
             inputLayout.error = ""
-        }
     }
 
-    companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, RegistrationActivity::class.java))
+    private fun finishWithResult(userAccount: UserAccount) {
+        val resultIntent = Intent()
+        resultIntent.putExtra(RESULT_INTENT_KEY, userAccount)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 }

@@ -20,7 +20,7 @@
     </style>
 
     <style name="CustomActionButton" parent="Base.TextAppearance.AppCompat.Widget.Button">
-        <item name="android:background">@color/orange</item>
+        <item name="android:background">@drawable/selector_button_signin</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 </resources>

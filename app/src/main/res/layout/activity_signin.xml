@@ -12,10 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:padding="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,9 +65,6 @@
             style="@style/CustomActionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextLayout"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
             android:elevation="4dp"
             android:text="@string/signin" />
     </LinearLayout>
