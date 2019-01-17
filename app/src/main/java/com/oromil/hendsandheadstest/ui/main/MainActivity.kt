@@ -3,6 +3,7 @@ package com.oromil.hendsandheadstest.ui.main
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -51,6 +52,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
         })
 
         btn_top.setOnClickListener { newsRecyclerView.scrollToPosition(0) }
+
+        mViewModel.loadWether()
     }
 
     override fun subscribeOnViewModelLiveData() {
@@ -63,6 +66,17 @@ class MainActivity : BaseActivity<MainViewModel>() {
             SignInActivity.start(this)
             finish()
         })
+
+        mViewModel.weather.observe(this, Observer {message ->
+            message?:return@Observer
+            showSnackBar(message)
+        })
+    }
+
+    fun showSnackBar(message: String) {
+        Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
+                .setAction("OK") { }
+                .show()
     }
 
     companion object {

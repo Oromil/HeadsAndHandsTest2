@@ -4,7 +4,8 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import com.oromil.hendsandheadstest.data.local.AppDataBase
 import com.oromil.hendsandheadstest.data.local.PreferencesHelper
-import com.oromil.hendsandheadstest.data.network.Api
+import com.oromil.hendsandheadstest.data.network.NewsApi
+import com.oromil.hendsandheadstest.data.network.WeatherApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,8 +21,14 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    internal fun provideApiService(): Api {
-        return Api.create()
+    internal fun provideApiService(): NewsApi {
+        return NewsApi.create()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideWeatherApi(): WeatherApi {
+        return WeatherApi.create()
     }
 
     @Singleton

@@ -12,19 +12,19 @@ private const val API_KEY = "sCokq6GJM4tSgdbDw0IUSSlBNUZ67hHR"
 private const val BASE_URL = "https://api.nytimes.com/svc/"
 
 @Singleton
-interface Api {
+interface NewsApi {
 
     @GET("topstories/v2/home.json?api-key=$API_KEY")
     fun getNews(): Observable<ResponseEntity>
 
     companion object Creator {
-        fun create(): Api {
+        fun create(): NewsApi {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl(BASE_URL)
                     .build()
-            return retrofit.create(Api::class.java)
+            return retrofit.create(NewsApi::class.java)
         }
     }
 }

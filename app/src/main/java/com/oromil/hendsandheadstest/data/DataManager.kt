@@ -6,18 +6,19 @@ import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import com.oromil.hendsandheadstest.data.entities.UserAccount
 import com.oromil.hendsandheadstest.data.local.PreferencesHelper
 import com.oromil.hendsandheadstest.data.local.dao.DataBaseDao
-import com.oromil.hendsandheadstest.data.network.Api
+import com.oromil.hendsandheadstest.data.network.NewsApi
+import com.oromil.hendsandheadstest.data.network.WeatherApi
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataManager @Inject constructor(private val api: Api, private val dataBaseDao: DataBaseDao,
+class DataManager @Inject constructor(private val newsApi: NewsApi, private val weatherApi: WeatherApi, private val dataBaseDao: DataBaseDao,
                                       private val sharedPreferences: PreferencesHelper) {
 
     fun getNews(): Flowable<List<StoryEntity>>? {
-        return api.getNews().map { response ->
+        return newsApi.getNews().map { response ->
             response.results.forEach { storyEntity: StoryEntity ->
                 if (storyEntity.multimedia.isEmpty())
                     storyEntity.multimedia.add(MultimediaEntity())
@@ -45,4 +46,7 @@ class DataManager @Inject constructor(private val api: Api, private val dataBase
 
     @WorkerThread
     fun getUserAccount(email:String) = dataBaseDao.getUserWithEmail(email)
+
+    @WorkerThread
+    fun getWeather() = weatherApi.getWeather(55.7522f,37.6156f, "RU" )
 }
