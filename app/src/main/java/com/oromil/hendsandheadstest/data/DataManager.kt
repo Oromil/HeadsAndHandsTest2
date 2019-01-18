@@ -45,4 +45,7 @@ class DataManager @Inject constructor(private val api: Api, private val dataBase
 
     @WorkerThread
     fun getUserAccount(email:String) = dataBaseDao.getUserWithEmail(email)
+
+    fun getLoginedUserEmail() = sharedPreferences.getUserEmail()
+    fun getLoggedUserName() = sharedPreferences.getUserName()
 }

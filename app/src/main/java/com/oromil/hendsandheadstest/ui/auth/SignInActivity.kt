@@ -12,6 +12,7 @@ import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import com.oromil.hendsandheadstest.ui.main.MainActivity
 import com.oromil.hendsandheadstest.ui.registration.RESULT_INTENT_KEY
 import com.oromil.hendsandheadstest.ui.registration.RegistrationActivity
+import com.oromil.hendsandheadstest.ui.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_signin.*
 import kotlinx.android.synthetic.main.app_bar.*
 
@@ -31,9 +32,14 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
         when (item.itemId) {
             R.id.action_register -> startActivityForResult(Intent(this,
                     RegistrationActivity::class.java), REGISTRATION_REQUEST_CODE)
-//                RegistrationActivity.startForResult(this)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        SplashActivity.start(this)
+        finish()
+        return true
     }
 
     override fun initViews() {

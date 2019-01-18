@@ -3,6 +3,8 @@ package com.oromil.hendsandheadstest.dagger.module
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
 import com.oromil.hendsandheadstest.ui.main.MainActivity
 import com.oromil.hendsandheadstest.ui.registration.RegistrationActivity
+import com.oromil.hendsandheadstest.ui.splash.SplashActivity
+import com.oromil.hendsandheadstest.ui.splash.SplashViewModel
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -17,4 +19,7 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributeRegistrationActivity(): RegistrationActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeSplashActivity(): SplashActivity
 }

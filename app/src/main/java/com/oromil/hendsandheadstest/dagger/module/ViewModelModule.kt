@@ -7,6 +7,7 @@ import com.oromil.hendsandheadstest.ui.auth.SignInViewModel
 import com.oromil.hendsandheadstest.ui.base.ViewModelFactory
 import com.oromil.hendsandheadstest.ui.main.MainViewModel
 import com.oromil.hendsandheadstest.ui.registration.RegistrationViewModel
+import com.oromil.hendsandheadstest.ui.splash.SplashViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,4 +34,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RegistrationViewModel::class)
     internal abstract fun registrationViewModel(viewModel: RegistrationViewModel):ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashViewModel::class)
+    internal abstract fun splashViewModel(viewModel: SplashViewModel):ViewModel
 }
