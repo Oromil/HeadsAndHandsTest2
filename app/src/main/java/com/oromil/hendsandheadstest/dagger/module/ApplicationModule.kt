@@ -2,10 +2,12 @@ package com.oromil.hendsandheadstest.dagger.module
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import android.content.Context
 import com.oromil.hendsandheadstest.data.local.AppDataBase
 import com.oromil.hendsandheadstest.data.local.PreferencesHelper
 import com.oromil.hendsandheadstest.data.network.NewsApi
 import com.oromil.hendsandheadstest.data.network.WeatherApi
+import com.oromil.hendsandheadstest.ui.main.WeatherMapper
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -44,4 +46,10 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun providePreferences(application: Application) = PreferencesHelper(application)
+
+    @Provides
+    fun provideContext(application: Application):Context = application.applicationContext
+
+    @Provides
+    fun provideWeatherMapper(application: Application) = WeatherMapper(application)
 }

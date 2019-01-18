@@ -1,15 +1,23 @@
 package com.oromil.hendsandheadstest.ui.main
 
+import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+//import com.google.android.gms.common.api.GoogleApiClient
+//import com.google.android.gms.location.FusedLocationProviderClient
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
@@ -50,10 +58,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 } else btn_top.visibility = View.GONE
             }
         })
-
         btn_top.setOnClickListener { newsRecyclerView.scrollToPosition(0) }
-
-        mViewModel.loadWether()
     }
 
     override fun subscribeOnViewModelLiveData() {
@@ -67,10 +72,41 @@ class MainActivity : BaseActivity<MainViewModel>() {
             finish()
         })
 
-        mViewModel.weather.observe(this, Observer {message ->
-            message?:return@Observer
+        mViewModel.weather.observe(this, Observer { message ->
+            message ?: return@Observer
             showSnackBar(message)
         })
+
+
+        mViewModel.requestPermissions().observe(this, Observer { listPermissionsNeeded ->
+            listPermissionsNeeded ?: return@Observer
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 56)
+        })
+
+        mViewModel.requestEnable().observe(this, Observer { status ->
+            status ?: return@Observer
+            status.startResolutionForResult(this@MainActivity,
+                    60)
+        })
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        val permissionLocation = ContextCompat.checkSelfPermission(this@MainActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+            Log.d("", "")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        when (requestCode) {
+            60 -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    mViewModel.getLocation()
+                }
+                Activity.RESULT_CANCELED -> finish()
+            }
+        }
     }
 
     fun showSnackBar(message: String) {

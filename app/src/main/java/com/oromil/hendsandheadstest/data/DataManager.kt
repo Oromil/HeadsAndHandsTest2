@@ -1,5 +1,6 @@
 package com.oromil.hendsandheadstest.data
 
+import android.location.Location
 import android.support.annotation.WorkerThread
 import com.oromil.hendsandheadstest.data.entities.MultimediaEntity
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
@@ -14,7 +15,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataManager @Inject constructor(private val newsApi: NewsApi, private val weatherApi: WeatherApi, private val dataBaseDao: DataBaseDao,
+class DataManager @Inject constructor(private val newsApi: NewsApi,
+                                      private val weatherApi: WeatherApi,
+                                      private val dataBaseDao: DataBaseDao,
                                       private val sharedPreferences: PreferencesHelper) {
 
     fun getNews(): Flowable<List<StoryEntity>>? {
@@ -39,14 +42,15 @@ class DataManager @Inject constructor(private val newsApi: NewsApi, private val 
         sharedPreferences.saveUserName(userAccount.name)
     }
 
-    fun logoutUser(){
+    fun logoutUser() {
         sharedPreferences.saveUserName("")
         sharedPreferences.saveUserEmail("")
     }
 
     @WorkerThread
-    fun getUserAccount(email:String) = dataBaseDao.getUserWithEmail(email)
+    fun getUserAccount(email: String) = dataBaseDao.getUserWithEmail(email)
 
     @WorkerThread
-    fun getWeather() = weatherApi.getWeather(55.7522f,37.6156f, "RU" )
+    fun getWeather(location: Location) = weatherApi.getWeather(location.latitude.toFloat(),
+            location.longitude.toFloat(), "RU")
 }

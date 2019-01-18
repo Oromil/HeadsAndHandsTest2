@@ -16,7 +16,7 @@
     <string name="registration">Registration</string>
     <string name="persons">Persons</string>
 
-    <string name="weather_message" formatted="false">Hellow, %s! Now in %s %s degrees, %s</string>
+    <string name="weather_message" formatted="false">Now in %s %s degrees, </string>
 
     <string name="exit_dialog_message">Do you want exit?</string>
     <string name="exit_dialog_title">Exit</string>

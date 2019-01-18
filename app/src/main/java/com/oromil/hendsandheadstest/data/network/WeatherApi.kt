@@ -1,6 +1,7 @@
 package com.oromil.hendsandheadstest.data.network
 
 import com.oromil.hendsandheadstest.data.entities.Weather
+import io.reactivex.Flowable
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -16,7 +17,7 @@ interface WeatherApi {
 
     @GET("data/2.5/weather?appid=$API_KEY&units=$UNITS")
     fun getWeather(@Query("lat") latitude: Float, @Query("lon") longitude: Float,
-                   @Query("lang") language: String):Call<Weather>
+                   @Query("lang") language: String):Flowable<Weather>
 
     companion object Creator {
         fun create(): WeatherApi {

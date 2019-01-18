@@ -1,22 +1,29 @@
 package com.oromil.hendsandheadstest.ui.main
 
+import android.arch.core.util.Function
 import android.arch.lifecycle.*
+import android.location.Location
 import com.oromil.hendsandheadstest.data.DataManager
+import com.oromil.hendsandheadstest.data.GeolocationProvider
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import ru.gildor.coroutines.retrofit.Result
-import ru.gildor.coroutines.retrofit.awaitResult
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val mDataManager: DataManager)
+class MainViewModel @Inject constructor(private val mDataManager: DataManager,
+                                        private val geoProvider: GeolocationProvider,
+                                        private val weatherMapper: WeatherMapper)
     : ViewModel() {
 
     val logout = MutableLiveData<Boolean>()
-    val weather = MutableLiveData<String>()
+    val weather = Transformations.switchMap(geoProvider.locationData, Function<Location, LiveData<String?>> { location ->
+        return@Function LiveDataReactiveStreams.fromPublisher(mDataManager.getWeather(location)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { weather ->
+                    weatherMapper.mapToString(weather)
+                })
+    })
 
     var update: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -29,38 +36,6 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager)
                 ?.observeOn(AndroidSchedulers.mainThread())!!)
     }
 
-    fun loadWether() {
-        val req = mDataManager.getWeather()
-        try {
-
-            CoroutineScope(Dispatchers.Main).async{
-                val result = req.awaitResult()
-                when(result){
-                    is Result.Ok->{
-                        val weatherResponse = result.value
-                        weather.value = "Now in "+weatherResponse.name+" "+weatherResponse.main.temp + "C, "
-                    }
-                    is Result.Error->{}
-                    is Result.Exception->{}
-                }
-            }
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
-//        ioThenMain({ mDataManager.getWeather() }) { call ->
-//            call ?: return@ioThenMain
-//            call.enqueue(object : Callback<Weather> {
-//                override fun onFailure(call: Call<Weather>, t: Throwable) {
-//
-//                }
-//
-//                override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
-//                    Log.d("Weather", (response.body() as Weather).name)
-//                }
-//            })
-//        }
-    }
-
     fun update() {
         update.value = true
     }
@@ -69,4 +44,11 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager)
         mDataManager.logoutUser()
         logout.value = true
     }
+
+    fun getLocation() {
+        geoProvider.getMyLocation()
+    }
+
+    fun requestPermissions() = geoProvider.requestPermissions
+    fun requestEnable() = geoProvider.requestGeolocationEnable
 }
