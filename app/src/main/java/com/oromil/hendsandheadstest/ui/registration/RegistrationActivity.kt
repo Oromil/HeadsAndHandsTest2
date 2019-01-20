@@ -49,7 +49,6 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
             }
         })
         mViewModel.accountCreated.observe(this, Observer { account ->
-            progressBar.visibility = View.GONE
             account ?: return@Observer
             finishWithResult(account)
         })

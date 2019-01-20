@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -43,6 +42,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> mViewModel.logoutUser()
+            R.id.forecast -> mViewModel.getLocation()
         }
         return true
     }
@@ -71,6 +71,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         mViewModel.result.observe(this, Observer { data ->
             (newsRecyclerView.adapter as NewsAdapter).updateData(data as List<StoryEntity>)
             swipeRefreshLayout.isRefreshing = false
+            progressBar.visibility = View.GONE
         })
         mViewModel.logout.observe(this, Observer {
             SignInActivity.start(this)
@@ -78,7 +79,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
         })
 
         mViewModel.weather.observe(this, Observer { message ->
-            message ?: return@Observer
+            if (message==null){
+                showSnackBar(getString(R.string.snackbar_error_message))
+                return@Observer
+            }
             showSnackBar(message)
         })
 
@@ -95,7 +99,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         })
 
         mViewModel.loadingError.observe(this, Observer {
-            Toast.makeText(this, "networkError", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
         })
     }
 
@@ -105,6 +109,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 Manifest.permission.ACCESS_FINE_LOCATION)
         if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
             mViewModel.getLocation()
+        }else{
+            showSnackBar(getString(R.string.snackbar_geolocation_error))
         }
     }
 
@@ -114,14 +120,14 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 Activity.RESULT_OK -> {
                     mViewModel.getLocation()
                 }
-                Activity.RESULT_CANCELED -> showSnackBar("")
+                Activity.RESULT_CANCELED -> showSnackBar(getString(R.string.snackbar_geolocation_error))
             }
         }
     }
 
     private fun showSnackBar(message: String) {
         Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction("OK") { }
+                .setAction(getString(R.string.dialog_action_ok)) { }
                 .show()
     }
 

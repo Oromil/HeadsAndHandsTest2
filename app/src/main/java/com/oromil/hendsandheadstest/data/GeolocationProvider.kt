@@ -44,11 +44,11 @@ class GeolocationProvider @Inject constructor(private val context: Context) :
     }
 
     override fun onConnectionSuspended(p0: Int) {
-
+        Log.d("","")
     }
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-
+        Log.d("","")
     }
 
     fun updateGeolocation() {

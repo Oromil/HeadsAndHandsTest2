@@ -1,7 +1,7 @@
 package com.oromil.hendsandheadstest.data.network
 
 import com.oromil.hendsandheadstest.data.entities.ResponseEntity
-import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +15,7 @@ private const val BASE_URL = "https://api.nytimes.com/svc/"
 interface NewsApi {
 
     @GET("topstories/v2/home.json?api-key=$API_KEY")
-    fun getNews(): Observable<ResponseEntity>
+    fun getNews(): Call<ResponseEntity>
 
     companion object Creator {
         fun create(): NewsApi {

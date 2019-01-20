@@ -37,12 +37,14 @@
     <string name="name_error">incorrect name</string>
     <string name="input_data_error">incorrect data</string>
     <string name="repeat_password_error">passwords must match</string>
-    <string name="network_error">no internet</string>
+    <string name="network_error">Internet connection problems</string>
     <string name="registration_error">User was already registered!</string>
-    <string name="snackbar_error_message">Hellow, %s! Sorry, but weather forecast not available because there is no internet connection</string>
+    <string name="snackbar_error_message">Sorry, but weather forecast not available because there is no internet connection</string>
+    <string name="snackbar_geolocation_error">Sorry, but weather forecast not available without geolocation</string>
     <string name="user_exists_error">This user already exists</string>
     <string name="logout">Log out</string>
     <string name="unsuccess_login">Incorrect email or password</string>
     <string name="title_news">News</string>
     <string name="login">Login</string>
+    <string name="item_weather">Weather</string>=
 </resources>

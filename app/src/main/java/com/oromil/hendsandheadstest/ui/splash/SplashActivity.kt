@@ -3,6 +3,7 @@ package com.oromil.hendsandheadstest.ui.splash
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
@@ -16,7 +17,15 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun initViews() {
-        btnLogin.setOnClickListener { mViewModel.checkLoggedUser() }
+        btnLogin.setOnClickListener {
+            mViewModel.checkLoggedUser()
+            progressBar.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        progressBar.visibility = View.GONE
     }
 
     override fun subscribeOnViewModelLiveData() {

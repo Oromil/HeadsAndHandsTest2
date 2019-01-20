@@ -1,16 +1,20 @@
 package com.oromil.hendsandheadstest.ui.main
 
 import android.arch.core.util.Function
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.ViewModel
 import android.location.Location
-import android.util.Log
+import android.support.annotation.UiThread
 import com.oromil.hendsandheadstest.data.DataManager
 import com.oromil.hendsandheadstest.data.GeolocationProvider
+import com.oromil.hendsandheadstest.data.entities.ResponseEntity
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
-import com.oromil.hendsandheadstest.data.entities.Weather
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val mDataManager: DataManager,
@@ -19,15 +23,17 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
 
     val logout = MutableLiveData<Boolean>()
 
-    val weather = Transformations.switchMap(geoProvider.locationData, Function<Location, LiveData<String?>> { location ->
-        return@Function Transformations.map(mDataManager.getWeather(location), Function { weatherResponse ->
-            if (weatherResponse == null) {
-                loadingError.value = Unit
-                return@Function null
-            }
-            weatherMapper.mapToString(weatherResponse)
-        })
-    })
+    val weather = Transformations.switchMap(geoProvider.locationData,
+            Function<Location, LiveData<String?>> { location ->
+                return@Function Transformations.map(mDataManager.getWeather(location),
+                        Function { weatherResponse ->
+                            if (weatherResponse == null) {
+                                loadingError.value = Unit
+                                return@Function null
+                            }
+                            weatherMapper.mapToString(weatherResponse)
+                        })
+            })!!
 
     private val update: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -36,13 +42,20 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
 
     val loadingError = MutableLiveData<Unit>()
 
+    @UiThread
     private fun loadNews(): LiveData<List<StoryEntity>> {
-        return LiveDataReactiveStreams.fromPublisher(mDataManager.getNews()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.doOnError {
-                    loadingError.value = Unit
-                }!!)
+        return Transformations.map(mDataManager.getNews(),
+                Function<ResponseEntity?, List<StoryEntity>> { input ->
+                    if (input == null) {
+                        loadingError.value = Unit
+                        return@Function runBlocking {
+                            return@runBlocking CoroutineScope(Dispatchers.IO).async {
+                                mDataManager.getNewsFromDataBase()
+                            }.await()
+                        }
+                    }
+                    return@Function input.results
+                })
     }
 
     fun update() {
