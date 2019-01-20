@@ -6,7 +6,7 @@ import android.location.Location
 import android.support.annotation.WorkerThread
 import com.oromil.hendsandheadstest.data.entities.NewsResponseEntity
 import com.oromil.hendsandheadstest.data.entities.UserAccount
-import com.oromil.hendsandheadstest.data.entities.Weather
+import com.oromil.hendsandheadstest.data.entities.WeatherEntity
 import com.oromil.hendsandheadstest.data.local.PreferencesHelper
 import com.oromil.hendsandheadstest.data.local.dao.DataBaseDao
 import com.oromil.hendsandheadstest.data.network.NewsApi
@@ -61,16 +61,16 @@ class DataManager @Inject constructor(private val newsApi: NewsApi,
     fun getLoggedUserName() = sharedPreferences.getUserName()
 
     @WorkerThread
-    fun getWeather(location: Location): LiveData<Weather?> {
-        val data = MutableLiveData<Weather>()
+    fun getWeather(location: Location): LiveData<WeatherEntity?> {
+        val data = MutableLiveData<WeatherEntity>()
         weatherApi.getWeather(location.latitude.toFloat(),
                 location.longitude.toFloat(), "RU")
-                .enqueue(object : Callback<Weather> {
-                    override fun onFailure(call: Call<Weather>, t: Throwable) {
+                .enqueue(object : Callback<WeatherEntity> {
+                    override fun onFailure(call: Call<WeatherEntity>, t: Throwable) {
                         data.value = null
                     }
 
-                    override fun onResponse(call: Call<Weather>, weatherResponce: Response<Weather>) {
+                    override fun onResponse(call: Call<WeatherEntity>, weatherResponce: Response<WeatherEntity>) {
                         data.value = weatherResponce.body()
                     }
 
