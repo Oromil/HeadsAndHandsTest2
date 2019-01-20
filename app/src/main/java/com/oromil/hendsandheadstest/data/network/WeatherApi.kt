@@ -1,5 +1,6 @@
 package com.oromil.hendsandheadstest.data.network
 
+import android.arch.lifecycle.LiveData
 import com.oromil.hendsandheadstest.data.entities.Weather
 import io.reactivex.Flowable
 import retrofit2.Call
@@ -17,7 +18,7 @@ interface WeatherApi {
 
     @GET("data/2.5/weather?appid=$API_KEY&units=$UNITS")
     fun getWeather(@Query("lat") latitude: Float, @Query("lon") longitude: Float,
-                   @Query("lang") language: String):Flowable<Weather>
+                   @Query("lang") language: String):Call<Weather>
 
     companion object Creator {
         fun create(): WeatherApi {

@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
@@ -91,6 +92,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
         mViewModel.requestEnable().observe(this, Observer { status ->
             status ?: return@Observer
             status.startResolutionForResult(this@MainActivity, GEOLOCATION_ENABLING_REQUEST)
+        })
+
+        mViewModel.loadingError.observe(this, Observer {
+            Toast.makeText(this, "networkError", Toast.LENGTH_SHORT).show()
         })
     }
 
