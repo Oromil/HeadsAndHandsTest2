@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,6 +10,7 @@
     tools:context=".ui.main.MainActivity">
 
 
+
     <!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
     <!--xmlns:tools="http://schemas.android.com/tools"-->
@@ -17,16 +18,26 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent">-->
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <include
+            layout="@layout/app_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.design.widget.AppBarLayout>
 
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/newsRecyclerView"
@@ -39,23 +50,19 @@
         android:id="@+id/btn_top"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/btn_top_backgr"
-        android:drawableRight="@drawable/ic_arrow_up"
+        android:drawableEnd="@drawable/ic_arrow_up"
+        android:layout_marginTop="16dp"
         android:text="To top"
         android:textAllCaps="false"
         android:textColor="#80ffffff"
         android:visibility="gone"
         app:layout_anchor="@+id/refreshLayout"
         app:layout_anchorGravity="top|center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         tools:visibility="visible" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <!--</android.support.constraint.ConstraintLayout>-->
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

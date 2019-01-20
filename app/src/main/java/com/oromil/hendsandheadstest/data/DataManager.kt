@@ -48,7 +48,10 @@ class DataManager @Inject constructor(private val newsApi: NewsApi,
     }
 
     @WorkerThread
-    fun getUserAccount(email: String) = dataBaseDao.getUserWithEmail(email)
+    fun getUserAccount(email:String) = dataBaseDao.getUserWithEmail(email)
+
+    fun getLoginedUserEmail() = sharedPreferences.getUserEmail()
+    fun getLoggedUserName() = sharedPreferences.getUserName()
 
     @WorkerThread
     fun getWeather(location: Location) = weatherApi.getWeather(location.latitude.toFloat(),

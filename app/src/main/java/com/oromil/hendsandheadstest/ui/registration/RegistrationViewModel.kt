@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(private val dataManager: DataManager) : ViewModel() {
 
-
+    private val ACCOUNT_NOT_CREATED = -1L
 
     val accountCreated = MutableLiveData<UserAccount>()
     val incorrectInput = MutableLiveData<InputError>()
@@ -46,17 +46,11 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
         ioThenMain({ dataManager.saveUser(userAccount) }) { id ->
             when (id) {
                 //todo
-                -1L -> {
-                    incorrectInput.value = EMAIL_EXISTS
-                }
-                else -> {
-                    accountCreated.value = userAccount
-                }
+                ACCOUNT_NOT_CREATED -> incorrectInput.value = EMAIL_EXISTS
+                else -> accountCreated.value = userAccount
             }
         }
     }
-
-    fun loginUser(userAccount: UserAccount)= dataManager.loginUserAccount(userAccount)
 
     enum class InputError {
         INCORRECT_EMAIL,

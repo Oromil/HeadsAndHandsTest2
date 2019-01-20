@@ -16,9 +16,7 @@
         android:theme="@style/AppTheme">
         <!--android:roundIcon="@mipmap/ic_launcher_round"-->
 
-        <activity
-            android:name=".ui.auth.SignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity android:name=".ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +25,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.registration.RegistrationActivity"
+            android:name=".ui.auth.SignInActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:windowSoftInputMode="adjustResize">
 
         </activity>
+        <activity
+            android:name=".ui.registration.RegistrationActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.oromil.hendsandheadstest.ui.main.MainActivity"></activity>
     </application>
 

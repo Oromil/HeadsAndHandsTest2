@@ -2,6 +2,7 @@ package com.oromil.hendsandheadstest.data.entities
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "users_table")
 data class UserAccount(
@@ -9,4 +10,4 @@ data class UserAccount(
         var email: String,
         var name: String,
         var password: String
-)
+):Serializable

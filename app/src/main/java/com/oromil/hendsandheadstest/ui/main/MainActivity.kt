@@ -23,6 +23,7 @@ import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar.*
 
 class MainActivity : BaseActivity<MainViewModel>() {
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -44,6 +45,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     override fun initViews() {
+        setupActionBar()
+
         swipeRefreshLayout = refreshLayout
 
         swipeRefreshLayout.setOnRefreshListener { mViewModel.update() }
@@ -113,6 +116,12 @@ class MainActivity : BaseActivity<MainViewModel>() {
         Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK") { }
                 .show()
+    }
+
+    private fun setupActionBar() {
+        setSupportActionBar(toolbar)
+        val actionBar = supportActionBar
+        actionBar?.setTitle(R.string.title_news)
     }
 
     companion object {
