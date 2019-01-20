@@ -9,7 +9,7 @@ import android.location.Location
 import android.support.annotation.UiThread
 import com.oromil.hendsandheadstest.data.DataManager
 import com.oromil.hendsandheadstest.data.GeolocationProvider
-import com.oromil.hendsandheadstest.data.entities.ResponseEntity
+import com.oromil.hendsandheadstest.data.entities.NewsResponseEntity
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +45,7 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
     @UiThread
     private fun loadNews(): LiveData<List<StoryEntity>> {
         return Transformations.map(mDataManager.getNews(),
-                Function<ResponseEntity?, List<StoryEntity>> { input ->
+                Function<NewsResponseEntity?, List<StoryEntity>> { input ->
                     if (input == null) {
                         loadingError.value = Unit
                         return@Function runBlocking {

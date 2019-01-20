@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.location.Location
 import android.support.annotation.WorkerThread
-import com.oromil.hendsandheadstest.data.entities.ResponseEntity
+import com.oromil.hendsandheadstest.data.entities.NewsResponseEntity
 import com.oromil.hendsandheadstest.data.entities.UserAccount
 import com.oromil.hendsandheadstest.data.entities.Weather
 import com.oromil.hendsandheadstest.data.local.PreferencesHelper
@@ -23,15 +23,15 @@ class DataManager @Inject constructor(private val newsApi: NewsApi,
                                       private val dataBaseDao: DataBaseDao,
                                       private val sharedPreferences: PreferencesHelper) {
 
-    fun getNews():LiveData<ResponseEntity?>{
-        val data = MutableLiveData<ResponseEntity?>()
+    fun getNews():LiveData<NewsResponseEntity?>{
+        val data = MutableLiveData<NewsResponseEntity?>()
         newsApi.getNews()
-                .enqueue(object : Callback<ResponseEntity> {
-                    override fun onFailure(call: Call<ResponseEntity>, t: Throwable) {
+                .enqueue(object : Callback<NewsResponseEntity> {
+                    override fun onFailure(call: Call<NewsResponseEntity>, t: Throwable) {
                         data.value = null
                     }
 
-                    override fun onResponse(call: Call<ResponseEntity>, weatherResponce: Response<ResponseEntity>) {
+                    override fun onResponse(call: Call<NewsResponseEntity>, weatherResponce: Response<NewsResponseEntity>) {
                         data.value = weatherResponce.body()
                     }
 

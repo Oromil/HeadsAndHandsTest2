@@ -1,6 +1,6 @@
 package com.oromil.hendsandheadstest.data.network
 
-import com.oromil.hendsandheadstest.data.entities.ResponseEntity
+import com.oromil.hendsandheadstest.data.entities.NewsResponseEntity
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -15,7 +15,7 @@ private const val BASE_URL = "https://api.nytimes.com/svc/"
 interface NewsApi {
 
     @GET("topstories/v2/home.json?api-key=$API_KEY")
-    fun getNews(): Call<ResponseEntity>
+    fun getNews(): Call<NewsResponseEntity>
 
     companion object Creator {
         fun create(): NewsApi {

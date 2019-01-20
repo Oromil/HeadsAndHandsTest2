@@ -3,7 +3,7 @@ package com.oromil.hendsandheadstest.data.entities
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ResponseEntity(
+data class NewsResponseEntity(
         @SerializedName("status")
         @Expose
         var status: String,
