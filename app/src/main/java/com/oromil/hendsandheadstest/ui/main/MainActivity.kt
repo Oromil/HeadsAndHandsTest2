@@ -16,8 +16,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-//import com.google.android.gms.common.api.GoogleApiClient
-//import com.google.android.gms.location.FusedLocationProviderClient
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.data.entities.StoryEntity
 import com.oromil.hendsandheadstest.ui.auth.SignInActivity
@@ -25,7 +23,11 @@ import com.oromil.hendsandheadstest.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
 
+private const val GEOLOCATION_PERMISSIONS_REQUEST = 60
+private const val GEOLOCATION_ENABLING_REQUEST = 56
+
 class MainActivity : BaseActivity<MainViewModel>() {
+
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
@@ -48,7 +50,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
         setupActionBar()
 
         swipeRefreshLayout = refreshLayout
-
         swipeRefreshLayout.setOnRefreshListener { mViewModel.update() }
 
         newsRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -80,39 +81,40 @@ class MainActivity : BaseActivity<MainViewModel>() {
             showSnackBar(message)
         })
 
-
         mViewModel.requestPermissions().observe(this, Observer { listPermissionsNeeded ->
             listPermissionsNeeded ?: return@Observer
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 56)
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    GEOLOCATION_PERMISSIONS_REQUEST)
         })
 
         mViewModel.requestEnable().observe(this, Observer { status ->
             status ?: return@Observer
-            status.startResolutionForResult(this@MainActivity,
-                    60)
+            status.startResolutionForResult(this@MainActivity, GEOLOCATION_ENABLING_REQUEST)
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        val permissionLocation = ContextCompat.checkSelfPermission(this@MainActivity,
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        val permissionLocation = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
         if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-            Log.d("", "")
+            mViewModel.getLocation()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         when (requestCode) {
-            60 -> when (resultCode) {
+            GEOLOCATION_ENABLING_REQUEST -> when (resultCode) {
                 Activity.RESULT_OK -> {
                     mViewModel.getLocation()
                 }
-                Activity.RESULT_CANCELED -> finish()
+                Activity.RESULT_CANCELED -> showSnackBar("")
             }
         }
     }
 
-    fun showSnackBar(message: String) {
+    private fun showSnackBar(message: String) {
         Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK") { }
                 .show()

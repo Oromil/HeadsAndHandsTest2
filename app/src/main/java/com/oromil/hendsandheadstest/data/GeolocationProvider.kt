@@ -1,35 +1,33 @@
 package com.oromil.hendsandheadstest.data
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
-import java.util.*
+import com.google.android.gms.location.LocationSettingsStatusCodes.*
 import javax.inject.Inject
 
-class GeolocationProvider @Inject constructor(private val context: Context)
-    :
+class GeolocationProvider @Inject constructor(private val context: Context) :
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
-{
+        GoogleApiClient.OnConnectionFailedListener {
 
     val requestPermissions = MutableLiveData<List<String>>()
     val requestGeolocationEnable = MutableLiveData<Status>()
     val locationData = MutableLiveData<Location>()
 
-//    private val locationCallback = object :LocationCallback(){
-//        override fun onLocationResult(p0: LocationResult?) {
-//            locationData.value
-//        }
-//    }
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(newLocation: LocationResult) {
+            locationData.value = newLocation.lastLocation
+        }
+    }
 
     private val googleApiClient = GoogleApiClient.Builder(context)
             .addConnectionCallbacks(this)
@@ -38,66 +36,69 @@ class GeolocationProvider @Inject constructor(private val context: Context)
             .build()
 
     init {
-        googleApiClient.connect()
+        connectGoogleApiClient()
     }
 
-    override fun onConnected(p0: Bundle?) {
-        checkPermissions()
+    override fun onConnected(bundle: Bundle?) {
+        updateGeolocation()
     }
 
     override fun onConnectionSuspended(p0: Int) {
+
     }
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
+    override fun onConnectionFailed(connectionResult: ConnectionResult) {
+
     }
 
-    override fun onLocationChanged(newLocation: Location) {
-//        locationData.value = newLocation
-    }
-
-    private fun checkPermissions() {
-        val permissionLocation = ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-        val listPermissionsNeeded = ArrayList<String>()
-        if (permissionLocation != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            if (!listPermissionsNeeded.isEmpty()) {
-                requestPermissions.value = listPermissionsNeeded
-            }
-        } else {
-            getMyLocation()
+    fun updateGeolocation() {
+        if (!checkGoogleApiClientConnected()) {
+            connectGoogleApiClient()
+            return
         }
+        if (!checkPermissions()) {
+            requestPermissions.value = arrayListOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            return
+        }
+        val locationRequest = createLocationRequest()
+        checkGeolocationAvailable(createLocationSettingsRequest(locationRequest))
+        requestLocationUpdates(locationRequest)
     }
 
-    fun getMyLocation() {
-        if (googleApiClient != null) {
-            if (googleApiClient.isConnected) {
-                val permissionLocation = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                    val locationRequest = LocationRequest()
-                    locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    locationRequest.numUpdates = 1
-                    val builder = LocationSettingsRequest.Builder()
-                            .addLocationRequest(locationRequest)
-                    builder.setAlwaysShow(true)
-                    val client = FusedLocationProviderClient(context)
-                    client.requestLocationUpdates(locationRequest, object : LocationCallback(){
-                        override fun onLocationResult(p0: LocationResult?) {
-                            locationData.value = p0!!.lastLocation
-                        }
-                    }, null)
-//                    LocationServices.FusedLocationApi
-//                            .requestLocationUpdates(googleApiClient, locationRequest, this)
-                    val result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build())
-                    result.setResultCallback { result ->
-                        val status = result.status
-                        when (status.statusCode) {
-                            LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> requestGeolocationEnable.value = status
-                        }
-                    }
-                }
+    private fun checkGoogleApiClientConnected() = googleApiClient.isConnected
+
+    private fun connectGoogleApiClient() = googleApiClient.connect()
+
+    private fun checkPermissions(): Boolean = ContextCompat.checkSelfPermission(context,
+            android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    private fun createLocationSettingsRequest(request: LocationRequest): LocationSettingsRequest {
+        val builder = LocationSettingsRequest.Builder()
+                .addLocationRequest(request)
+        builder.setAlwaysShow(true)
+        return builder.build()
+    }
+
+    private fun createLocationRequest(): LocationRequest {
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.numUpdates = 1
+        return locationRequest
+    }
+
+    private fun checkGeolocationAvailable(settingsRequest: LocationSettingsRequest) {
+        val result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, settingsRequest)
+        result.setResultCallback { result ->
+            val status = result.status
+            when (status.statusCode) {
+                RESOLUTION_REQUIRED -> requestGeolocationEnable.value = status
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun requestLocationUpdates(locationRequest: LocationRequest) {
+        val client = FusedLocationProviderClient(context)
+        client.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 }

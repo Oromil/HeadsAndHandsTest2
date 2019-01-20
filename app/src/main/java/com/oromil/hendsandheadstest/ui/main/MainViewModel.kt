@@ -46,7 +46,7 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
     }
 
     fun getLocation() {
-        geoProvider.getMyLocation()
+        geoProvider.updateGeolocation()
     }
 
     fun requestPermissions() = geoProvider.requestPermissions
