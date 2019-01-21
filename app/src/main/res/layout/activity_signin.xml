@@ -63,7 +63,7 @@
             android:id="@+id/btnApply"
             android:theme="@style/SignInButton"
             android:layout_height="wrap_content"
-            android:text="@string/signin" />
+            android:text="@string/sign_in" />
     </LinearLayout>
 
     <include layout="@layout/app_bar" />

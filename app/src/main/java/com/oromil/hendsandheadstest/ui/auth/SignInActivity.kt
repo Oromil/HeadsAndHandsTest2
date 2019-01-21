@@ -53,11 +53,12 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
     override fun subscribeOnViewModelLiveData() {
         mViewModel.authorizationSuccess.observe(this, Observer { success ->
             success ?: return@Observer
-            if (success)
+            if (success) {
                 MainActivity.start(this)
-            else {
+                finish()
+            } else {
                 etPassword.text.clear()
-                emailInputLayout.error = getString(R.string.unsuccess_login)
+                emailInputLayout.error = getString(R.string.failure_login)
             }
         })
     }
@@ -76,7 +77,7 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
     private fun setupActionBar() {
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
-        actionBar?.setTitle(R.string.authorization)
+        actionBar?.setTitle(R.string.title_authorization)
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)

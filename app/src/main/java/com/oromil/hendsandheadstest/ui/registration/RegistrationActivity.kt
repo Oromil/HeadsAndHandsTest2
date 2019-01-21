@@ -2,14 +2,12 @@ package com.oromil.hendsandheadstest.ui.registration
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
 import android.support.design.widget.TextInputLayout
 import android.view.View
 import com.oromil.hendsandheadstest.R
 import com.oromil.hendsandheadstest.data.entities.UserAccount
 import com.oromil.hendsandheadstest.ui.base.BaseActivity
-import com.oromil.hendsandheadstest.ui.main.MainActivity
 import com.oromil.hendsandheadstest.ui.registration.RegistrationViewModel.InputError.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.android.synthetic.main.app_bar.*
@@ -57,7 +55,7 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
     private fun setupActionBar() {
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
-        actionBar?.setTitle(R.string.registration)
+        actionBar?.setTitle(R.string.title_registration)
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)

@@ -31,9 +31,10 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     override fun subscribeOnViewModelLiveData() {
         mViewModel.isUserLogged.observe(this, Observer { isLogged ->
             isLogged ?: return@Observer
-            if (isLogged)
+            if (isLogged) {
                 MainActivity.start(this)
-            else SignInActivity.start(this)
+                finish()
+            } else SignInActivity.start(this)
         })
     }
 

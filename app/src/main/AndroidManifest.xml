@@ -16,10 +16,13 @@
         android:theme="@style/AppTheme">
         <!--android:roundIcon="@mipmap/ic_launcher_round"-->
 
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:noHistory="true" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -32,7 +35,7 @@
         </activity>
         <activity
             android:name=".ui.registration.RegistrationActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name="com.oromil.hendsandheadstest.ui.main.MainActivity"></activity>
     </application>
 
