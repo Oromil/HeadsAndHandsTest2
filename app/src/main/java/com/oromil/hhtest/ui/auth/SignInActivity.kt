@@ -10,13 +10,11 @@ import com.oromil.hhtest.R
 import com.oromil.hhtest.data.entities.UserAccount
 import com.oromil.hhtest.ui.base.BaseActivity
 import com.oromil.hhtest.ui.main.MainActivity
-import com.oromil.hhtest.ui.registration.RESULT_INTENT_KEY
 import com.oromil.hhtest.ui.registration.RegistrationActivity
+import com.oromil.hhtest.ui.registration.RegistrationActivity.Companion.RESULT_INTENT_KEY
 import com.oromil.hhtest.ui.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_signin.*
 import kotlinx.android.synthetic.main.app_bar.*
-
-const val REGISTRATION_REQUEST_CODE = 1
 
 class SignInActivity : BaseActivity<SignInViewModel>() {
     override fun getLayoutId(): Int = R.layout.activity_signin
@@ -52,15 +50,19 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
 
     override fun subscribeOnViewModelLiveData() {
         mViewModel.authorizationSuccess.observe(this, Observer { success ->
-            success ?: return@Observer
-            if (success) {
-                MainActivity.start(this)
-                finish()
-            } else {
-                etPassword.text.clear()
-                emailInputLayout.error = getString(R.string.failure_login)
-            }
+            processAuthorization(success)
         })
+    }
+
+    private fun processAuthorization(success: Boolean?) {
+        success ?: return
+        if (success) {
+            MainActivity.start(this)
+            finish()
+        } else {
+            etPassword.text.clear()
+            emailInputLayout.error = getString(R.string.failure_login)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,6 +86,7 @@ class SignInActivity : BaseActivity<SignInViewModel>() {
     }
 
     companion object {
+        const val REGISTRATION_REQUEST_CODE = 1
         fun start(context: Context) = context.startActivity(Intent(context, SignInActivity::class.java))
     }
 }

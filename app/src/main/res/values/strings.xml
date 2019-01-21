@@ -23,7 +23,6 @@
     <string name="repeat_pass_hint">Repeat password</string>
 
     <!--Errors-->
-    <string name="text_input_empty_error">please, enter the data</string>
     <string name="password_error">password must be at least 6 characters long and contain at least 1 number and uppercase letter</string>
     <string name="email_error">incorrect e-mail</string>
     <string name="name_error">incorrect name</string>
@@ -43,4 +42,5 @@
     <!--Menu items-->
     <string name="item_weather">Weather</string>
     <string name="logout">Log out</string>
+
 </resources>

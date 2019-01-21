@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import android.support.annotation.UiThread
 import com.oromil.hhtest.data.DataManager
 import com.oromil.hhtest.data.entities.UserAccount
-import com.oromil.hhtest.utils.encryptUserAccount
+import com.oromil.hhtest.utils.CryptUtil
 import com.oromil.hhtest.utils.ioThenMain
 import com.oromil.hhtest.utils.isDataEqual
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class SignInViewModel @Inject constructor(private val dataManager: DataManager) 
     @UiThread
     fun signIn(email: String, password: String) {
 
-        val tempUserAccount = encryptUserAccount(UserAccount(email, "", password))
+        val tempUserAccount = CryptUtil.encryptUserAccount(UserAccount(email, "", password))
 
         ioThenMain({ dataManager.getUserAccount(tempUserAccount.email) }) { userAccount ->
             if (userAccount == null) {
@@ -33,7 +33,7 @@ class SignInViewModel @Inject constructor(private val dataManager: DataManager) 
         }
     }
 
-    fun login(userAccount: UserAccount){
+    fun login(userAccount: UserAccount) {
         dataManager.loginUserAccount(userAccount)
         authorizationSuccess.value = true
     }

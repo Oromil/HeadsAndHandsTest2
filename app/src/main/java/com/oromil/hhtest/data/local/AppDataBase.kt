@@ -7,8 +7,13 @@ import com.oromil.hhtest.data.entities.StoryEntity
 import com.oromil.hhtest.data.entities.UserAccount
 import javax.inject.Singleton
 
+
 @Singleton
 @Database(entities = [StoryEntity::class, UserAccount::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun mDao(): DataBaseDao
+
+    companion object {
+        const val DATABASE_NAME = "database"
+    }
 }

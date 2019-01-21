@@ -8,7 +8,6 @@ import android.location.Location
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
@@ -16,8 +15,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes.*
 import javax.inject.Inject
 
 class GeolocationProvider @Inject constructor(private val context: Context) :
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks {
 
     val requestPermissions = MutableLiveData<List<String>>()
     val requestGeolocationEnable = MutableLiveData<Status>()
@@ -31,7 +29,6 @@ class GeolocationProvider @Inject constructor(private val context: Context) :
 
     private val googleApiClient = GoogleApiClient.Builder(context)
             .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
             .addApi(LocationServices.API)
             .build()
 
@@ -43,12 +40,8 @@ class GeolocationProvider @Inject constructor(private val context: Context) :
         updateGeolocation()
     }
 
-    override fun onConnectionSuspended(p0: Int) {
-        Log.d("","")
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        Log.d("","")
+    override fun onConnectionSuspended(cause: Int) {
+        Log.e("GoogleApiException", "GoogleApiClient was suspended. Cause: $cause")
     }
 
     fun updateGeolocation() {
@@ -87,8 +80,8 @@ class GeolocationProvider @Inject constructor(private val context: Context) :
     }
 
     private fun checkGeolocationAvailable(settingsRequest: LocationSettingsRequest) {
-        val result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, settingsRequest)
-        result.setResultCallback { result ->
+        val pendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, settingsRequest)
+        pendingResult.setResultCallback { result ->
             val status = result.status
             when (status.statusCode) {
                 RESOLUTION_REQUIRED -> requestGeolocationEnable.value = status

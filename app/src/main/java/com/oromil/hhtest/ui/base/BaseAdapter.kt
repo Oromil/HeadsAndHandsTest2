@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class BaseAdapter<H:BaseAdapter.BaseViewHolder, M> : RecyclerView.Adapter<H>() {
+abstract class BaseAdapter<H:BaseAdapter.BaseViewHolder<M>, M> : RecyclerView.Adapter<H>() {
 
     var dataList:ArrayList<M> = ArrayList()
 
@@ -32,7 +32,7 @@ abstract class BaseAdapter<H:BaseAdapter.BaseViewHolder, M> : RecyclerView.Adapt
         notifyDataSetChanged()
     }
 
-    abstract class BaseViewHolder(v:View): RecyclerView.ViewHolder(v){
-        abstract fun init(item : Any)
+    abstract class BaseViewHolder<T>(v:View): RecyclerView.ViewHolder(v){
+        abstract fun init(item : T)
     }
 }

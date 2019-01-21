@@ -10,4 +10,4 @@ data class UserAccount(
         var email: String,
         var name: String,
         var password: String
-):Serializable
+) : Serializable

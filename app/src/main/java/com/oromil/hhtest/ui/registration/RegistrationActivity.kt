@@ -12,8 +12,6 @@ import com.oromil.hhtest.ui.registration.RegistrationViewModel.InputError.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.android.synthetic.main.app_bar.*
 
-const val RESULT_INTENT_KEY = "user_account"
-
 class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
 
     lateinit var inputLayouts: ArrayList<TextInputLayout>
@@ -35,20 +33,28 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
 
     override fun subscribeOnViewModelLiveData() {
         mViewModel.incorrectInput.observe(this, Observer { error ->
-            progressBar.visibility = View.GONE
-            error ?: return@Observer
-            when (error) {
-                INCORRECT_EMAIL -> emailInputLayout.error = getString(R.string.email_error)
-                INCORRECT_PASSWORD -> passwordInputLayout.error = getString(R.string.password_error)
-                INCORRECT_NAME -> nameTextInputLayout.error = getString(R.string.name_error)
-                INCORRECT_REPEAT -> repeatInputLayout.error = getString(R.string.repeat_password_error)
-                EMAIL_EXISTS -> emailInputLayout.error = getString(R.string.user_exists_error)
-            }
+            processInputError(error)
         })
         mViewModel.accountCreated.observe(this, Observer { account ->
-            account ?: return@Observer
-            finishWithResult(account)
+            processAccountCreating(account)
         })
+    }
+
+    private fun processInputError(error: RegistrationViewModel.InputError?) {
+        progressBar.visibility = View.GONE
+        when (error) {
+            INCORRECT_EMAIL -> emailInputLayout.error = getString(R.string.email_error)
+            INCORRECT_PASSWORD -> passwordInputLayout.error = getString(R.string.password_error)
+            INCORRECT_NAME -> nameTextInputLayout.error = getString(R.string.name_error)
+            INCORRECT_REPEAT -> repeatInputLayout.error = getString(R.string.repeat_password_error)
+            EMAIL_EXISTS -> emailInputLayout.error = getString(R.string.user_exists_error)
+            else -> return
+        }
+    }
+
+    private fun processAccountCreating(account: UserAccount?) {
+        account ?: return
+        finishWithResult(account)
     }
 
     private fun setupActionBar() {
@@ -75,5 +81,9 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
         resultIntent.putExtra(RESULT_INTENT_KEY, userAccount)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    companion object {
+        const val RESULT_INTENT_KEY = "user_account"
     }
 }

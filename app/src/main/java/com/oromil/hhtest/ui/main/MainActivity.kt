@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import com.google.android.gms.common.api.Status
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -24,9 +25,6 @@ import com.oromil.hhtest.ui.auth.SignInActivity
 import com.oromil.hhtest.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
-
-private const val GEOLOCATION_PERMISSIONS_REQUEST = 60
-private const val GEOLOCATION_ENABLING_REQUEST = 56
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
@@ -70,39 +68,59 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun subscribeOnViewModelLiveData() {
         mViewModel.update()
-        mViewModel.result.observe(this, Observer { data ->
-            (newsRecyclerView.adapter as NewsAdapter).updateData(data as List<StoryEntity>)
-            swipeRefreshLayout.isRefreshing = false
-            progressBar.visibility = View.GONE
-        })
-        mViewModel.logout.observe(this, Observer {
-            SignInActivity.start(this)
-            finish()
-        })
+        mViewModel.news.observe(this, Observer { data -> processNewsResponse(data) })
+        mViewModel.logout.observe(this, Observer { processLogout() })
 
         mViewModel.weather.observe(this, Observer { message ->
-            if (message == null) {
-                showSnackBar(getString(R.string.snackbar_error_message))
-                return@Observer
-            }
-            showSnackBar(message)
+            processWeatherResponse(message)
         })
 
         mViewModel.requestPermissions().observe(this, Observer { listPermissionsNeeded ->
-            listPermissionsNeeded ?: return@Observer
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    GEOLOCATION_PERMISSIONS_REQUEST)
+            processPermissionsRequest(listPermissionsNeeded)
         })
 
         mViewModel.requestEnable().observe(this, Observer { status ->
-            status ?: return@Observer
-            status.startResolutionForResult(this@MainActivity, GEOLOCATION_ENABLING_REQUEST)
+            processGeolocationEnablingRequest(status)
         })
 
-        mViewModel.loadingError.observe(this, Observer {
-            Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
-        })
+        mViewModel.loadingError.observe(this, Observer { processLoadingError() })
+    }
+
+    private fun processLoadingError() {
+        Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun processPermissionsRequest(listPermissionsNeeded: List<String>?) {
+        listPermissionsNeeded ?: return
+        ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                GEOLOCATION_PERMISSIONS_REQUEST)
+    }
+
+    private fun processGeolocationEnablingRequest(status: Status?) {
+        status ?: return
+        status.startResolutionForResult(this@MainActivity, GEOLOCATION_ENABLING_REQUEST)
+    }
+
+    private fun processWeatherResponse(message: String?) {
+        if (message == null) {
+            showSnackBar(getString(R.string.snackbar_error_message))
+            return
+        }
+        showSnackBar(message)
+    }
+
+    private fun processNewsResponse(data: List<StoryEntity>?) {
+        if (data != null) {
+            (newsRecyclerView.adapter as NewsAdapter).updateData(data)
+            swipeRefreshLayout.isRefreshing = false
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun processLogout() {
+        SignInActivity.start(this)
+        finish()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
@@ -150,6 +168,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     companion object {
+        private const val GEOLOCATION_PERMISSIONS_REQUEST = 60
+        private const val GEOLOCATION_ENABLING_REQUEST = 56
         fun start(context: Context) = context
                 .startActivity(Intent(context, MainActivity::class.java))
     }

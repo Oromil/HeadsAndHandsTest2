@@ -11,8 +11,6 @@ import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(private val dataManager: DataManager) : ViewModel() {
 
-    private val ACCOUNT_NOT_CREATED = -1L
-
     val accountCreated = MutableLiveData<UserAccount>()
     val incorrectInput = MutableLiveData<InputError>()
 
@@ -40,7 +38,7 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
         if (!isDataValid)
             return
 
-        val userAccount = encryptUserAccount(UserAccount(email, name, pass))
+        val userAccount = CryptUtil.encryptUserAccount(UserAccount(email, name, pass))
 
         ioThenMain({ dataManager.saveUser(userAccount) }) { id ->
             when (id) {
@@ -56,5 +54,9 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
         INCORRECT_NAME,
         INCORRECT_REPEAT,
         EMAIL_EXISTS
+    }
+
+    companion object {
+        private const val ACCOUNT_NOT_CREATED = -1L
     }
 }

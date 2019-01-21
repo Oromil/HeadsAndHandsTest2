@@ -11,6 +11,7 @@ import com.oromil.hhtest.data.DataManager
 import com.oromil.hhtest.data.GeolocationProvider
 import com.oromil.hhtest.data.entities.NewsResponseEntity
 import com.oromil.hhtest.data.entities.StoryEntity
+import com.oromil.hhtest.data.entities.WeatherEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,23 +22,20 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
                                         private val geoProvider: GeolocationProvider,
                                         private val weatherMapper: WeatherMapper) : ViewModel() {
 
-    val logout = MutableLiveData<Boolean>()
+    val logout = MutableLiveData<Unit>()
 
-    val weather = Transformations.switchMap(geoProvider.locationData,
-            Function<Location, LiveData<String?>> { location ->
-                return@Function Transformations.map(mDataManager.getWeather(location),
-                        Function { weatherResponse ->
-                            if (weatherResponse == null) {
-                                loadingError.value = Unit
-                                return@Function null
-                            }
-                            weatherMapper.mapToString(weatherResponse)
-                        })
-            })!!
+    val weather: LiveData<String?> = Transformations.switchMap(geoProvider.locationData)
+    { location ->
+        Transformations.map(mDataManager.getWeather(location))
+        { weatherResponse: WeatherEntity? ->
+            return@map weatherResponse?.let { weatherMapper.mapToString(it) }
+                    ?: null.also { loadingError.value = Unit }
+        }
+    }
 
     private val update: MutableLiveData<Boolean> = MutableLiveData()
 
-    val result: LiveData<List<StoryEntity>> = Transformations
+    val news: LiveData<List<StoryEntity>> = Transformations
             .switchMap(update) { loadNews() }
 
     val loadingError = MutableLiveData<Unit>()
@@ -64,7 +62,7 @@ class MainViewModel @Inject constructor(private val mDataManager: DataManager,
 
     fun logoutUser() {
         mDataManager.logoutUser()
-        logout.value = true
+        logout.value = Unit
     }
 
     fun getLocation() {

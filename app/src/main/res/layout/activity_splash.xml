@@ -8,12 +8,12 @@
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="48dp"
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo"
-        android:padding="48dp"/>
+        app:srcCompat="@drawable/logo"/>
 
     <Button
         android:id="@+id/btnLogin"
@@ -35,7 +35,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
-        android:elevation="5dp"/>
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

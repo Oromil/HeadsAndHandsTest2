@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HeadsAndHeadsTest</string>
     <string name="text_published">Опубликовано:</string>
+    <string name="btn_top_text">Наверх</string>
 
     <!--Buttons texts-->
     <string name="login">АВТОРИЗОВАТЬСЯ</string>
@@ -22,7 +23,6 @@
     <string name="repeat_pass_hint">Повторите пароль</string>
 
     <!--Errors-->
-    <string name="text_input_empty_error">Пожалуйста, введите данные</string>
     <string name="password_error">Пароль должен быть не короче 6 символов и содержать минимум одну цифру и заглавную букву</string>
     <string name="email_error">Неверный e-mail</string>
     <string name="name_error">Неверное имя</string>
@@ -42,6 +42,6 @@
     <!--Menu items-->
     <string name="item_weather">Погода</string>
     <string name="logout">Выйти</string>
-    <string name="btn_top_text">Наверх</string>
+
 
 </resources>

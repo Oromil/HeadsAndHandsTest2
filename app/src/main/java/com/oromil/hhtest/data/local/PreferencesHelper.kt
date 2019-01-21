@@ -3,8 +3,8 @@ package com.oromil.hhtest.data.local
 import android.content.Context
 import javax.inject.Inject
 
-private const val USER_EMAIL = ""
-private const val USER_NAME = ""
+private const val USER_EMAIL = "user_email"
+private const val USER_NAME = "user_name"
 
 class PreferencesHelper @Inject constructor(context: Context) {
     private val preferences = context.getSharedPreferences("com.oromil.hendsandheadstest", Context.MODE_PRIVATE)
@@ -17,7 +17,7 @@ class PreferencesHelper @Inject constructor(context: Context) {
         preferences.edit().putString(USER_NAME, name).apply()
     }
 
-    fun getUserEmail() = preferences.getString(USER_EMAIL, "")
+    fun getUserEmail():String = preferences.getString(USER_EMAIL, "")
 
-    fun getUserName() = preferences.getString(USER_NAME, "")
+    fun getUserName():String = preferences.getString(USER_NAME, "")
 }

@@ -19,8 +19,6 @@ import javax.inject.Singleton
 @Module(includes = [ViewModelModule::class])
 class ApplicationModule {
 
-    private val DATABASE_NAME: String = "database"
-
     @Provides
     @Singleton
     internal fun provideApiService(): NewsApi {
@@ -36,7 +34,7 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun provideDataBase(application: Application): AppDataBase {
-        return Room.databaseBuilder(application, AppDataBase::class.java, DATABASE_NAME).build()
+        return Room.databaseBuilder(application, AppDataBase::class.java, AppDataBase.DATABASE_NAME).build()
     }
 
     @Singleton
@@ -48,7 +46,7 @@ class ApplicationModule {
     fun providePreferences(application: Application) = PreferencesHelper(application)
 
     @Provides
-    fun provideContext(application: Application):Context = application.applicationContext
+    fun provideContext(application: Application): Context = application.applicationContext
 
     @Provides
     fun provideWeatherMapper(application: Application) = WeatherMapper(application)

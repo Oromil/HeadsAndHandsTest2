@@ -20,16 +20,15 @@ class NewsAdapter : BaseAdapter<NewsAdapter.NewsViewHolder, StoryEntity>() {
         holder.init(dataList[position])
     }
 
-    class NewsViewHolder(itemView: View) : BaseAdapter.BaseViewHolder(itemView) {
-        override fun init(item: Any) {
-            item as StoryEntity
+    class NewsViewHolder(itemView: View) : BaseAdapter.BaseViewHolder<StoryEntity>(itemView) {
+        override fun init(item: StoryEntity) {
             itemView.tvTitle.text = item.title
             itemView.tvDescription.text = item.abstract
             itemView.tvDate.text = item.createdDate.take(10)
             Glide.with(itemView).setDefaultRequestOptions(RequestOptions()
                     .placeholder(R.drawable.ic_default2)
                     .centerCrop().error(R.drawable.ic_default2))
-                    .load(item.multimedia[item.multimedia.size - 1].url)
+                    .load(item.imageUrl)
                     .into(itemView.imageView)
         }
     }
