@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HeadsAndHeadsTest</string>
     <string name="text_published">Published:</string>
+    <string name="btn_top_text">To top</string>
 
     <!--Buttons texts-->
     <string name="login">AUTHORIZATION</string>

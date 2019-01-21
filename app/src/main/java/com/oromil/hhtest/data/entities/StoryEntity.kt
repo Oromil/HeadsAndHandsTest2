@@ -27,12 +27,6 @@ data class StoryEntity(
         @Expose
         var abstract: String="",
 
-//        @SerializedName("byline")
-//        @Expose
-//        var byline: String="",
-//        @SerializedName("item_type")
-//        @Expose
-//        var itemType: String="",
         @SerializedName("updated_date")
         @Expose
         var updatedDate: String="",
@@ -42,28 +36,9 @@ data class StoryEntity(
         @SerializedName("published_date")
         @Expose
         var publishedDate: String="",
-//        @SerializedName("material_type_facet")
-//        @Expose
-//        var materialTypeFacet: String="",
         @SerializedName("kicker")
         @Expose
         var kicker: String="",
-//        @SerializedName("des_facet")
-//        @Expose
-//        @Embedded
-//        var desFacet: List<String>,
-//        @SerializedName("org_facet")
-//        @Expose
-//        @Embedded
-//        var orgFacet: List<String>,
-//        @SerializedName("per_facet")
-//        @Expose
-//        @Embedded
-//        var perFacet: List<String>,
-//        @SerializedName("geo_facet")
-//        @Expose
-//        @Embedded
-//        var geoFacet: List<String>,
         @SerializedName("multimedia")
         @Expose
         @Embedded

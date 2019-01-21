@@ -28,7 +28,6 @@ class RegistrationActivity : BaseActivity<RegistrationViewModel>() {
         btnApply.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             updateInputMessages()
-            //todo
             mViewModel.saveUser(etEmail.text.toString(),
                     etName.text.toString(), etPassword.text.toString(), etRepeatPassword.text.toString())
         }

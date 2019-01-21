@@ -19,7 +19,6 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
     @UiThread
     fun saveUser(email: String, name: String, pass: String, repeatedPass: String) {
 
-        //todo
         var isDataValid = true
         if (!isEmailValid(email)) {
             incorrectInput.value = INCORRECT_EMAIL
@@ -45,7 +44,6 @@ class RegistrationViewModel @Inject constructor(private val dataManager: DataMan
 
         ioThenMain({ dataManager.saveUser(userAccount) }) { id ->
             when (id) {
-                //todo
                 ACCOUNT_NOT_CREATED -> incorrectInput.value = EMAIL_EXISTS
                 else -> accountCreated.value = userAccount
             }

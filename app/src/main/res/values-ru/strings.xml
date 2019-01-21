@@ -42,5 +42,6 @@
     <!--Menu items-->
     <string name="item_weather">Погода</string>
     <string name="logout">Выйти</string>
+    <string name="btn_top_text">Наверх</string>
 
 </resources>
