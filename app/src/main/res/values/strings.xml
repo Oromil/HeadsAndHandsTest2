@@ -3,7 +3,7 @@
     <string name="text_published">Published:</string>
 
     <!--Buttons texts-->
-    <string name="login">Authorization</string>
+    <string name="login">AUTHORIZATION</string>
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">No</string>
     <string name="sign_up">Sign up</string>
@@ -12,8 +12,8 @@
 
     <!--Messages-->
     <string name="weather_message" formatted="false">Now in %s %s degrees, </string>
-    <string name="exit_dialog_message">Do you want exit?</string>
-    <string name="exit_dialog_title">Exit</string>
+    <string name="exit_dialog_message">Do you want to log out?</string>
+    <string name="exit_dialog_title">Log out</string>
 
     <!--Hints-->
     <string name="email_hint">E-mail</string>

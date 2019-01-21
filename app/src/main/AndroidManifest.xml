@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oromil.hendsandheadstest">
+    package="com.oromil.hhtest">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -8,16 +8,16 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="com.oromil.hendsandheadstest.BoilerplateApp"
+        android:name="com.oromil.hhtest.HeadsAndHandsApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--android:roundIcon="@mipmap/ic_launcher_round"-->
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name="com.oromil.hhtest.ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action
@@ -27,16 +27,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.auth.SignInActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
 
-        </activity>
         <activity
-            android:name=".ui.registration.RegistrationActivity"
+            android:name="com.oromil.hhtest.ui.auth.SignInActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.oromil.hhtest.ui.registration.RegistrationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.oromil.hendsandheadstest.ui.main.MainActivity"></activity>
+
+        <activity
+            android:name="com.oromil.hhtest.ui.main.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

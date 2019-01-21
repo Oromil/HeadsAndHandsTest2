@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">HeadsAndHeadsTest</string>
+    <string name="text_published">Опубликовано:</string>
+
+    <!--Buttons texts-->
+    <string name="login">АВТОРИЗОВАТЬСЯ</string>
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Нет</string>
+    <string name="sign_up">Создать</string>
+    <string name="sign_in">Войти</string>
+
+
+    <!--Messages-->
+    <string name="weather_message" formatted="false">"Сейчас в %s %s °С, "</string>
+    <string name="exit_dialog_message">Вы хотите выйти?</string>
+    <string name="exit_dialog_title">Выйти</string>
+
+    <!--Hints-->
+    <string name="email_hint">E-mail</string>
+    <string name="name_hint">Имя</string>
+    <string name="password_hint">Пароль</string>
+    <string name="repeat_pass_hint">Повторите пароль</string>
+
+    <!--Errors-->
+    <string name="text_input_empty_error">Пожалуйста, введите данные</string>
+    <string name="password_error">Пароль должен быть не короче 6 символов и содержать минимум одну цифру и заглавную букву</string>
+    <string name="email_error">Неверный e-mail</string>
+    <string name="name_error">Неверное имя</string>
+    <string name="repeat_password_error">Пароли должны совпадать</string>
+    <string name="network_error">Проблемы с интернет соединением</string>
+    <string name="snackbar_error_message">Извините, но прогноз погоды недоступен без интернет соединения</string>
+    <string name="snackbar_geolocation_error">Извините, но прогноз погоды недоступен без геолокации</string>
+    <string name="user_exists_error">Такой пользователь уже существует</string>
+
+    <string name="failure_login">Неверный e-mail или пароль</string>
+
+    <!--Titles-->
+    <string name="title_news">Новости</string>
+    <string name="title_authorization">Авторизация</string>
+    <string name="title_registration">Регистрация</string>
+
+    <!--Menu items-->
+    <string name="item_weather">Погода</string>
+    <string name="logout">Выйти</string>
+
+</resources>
